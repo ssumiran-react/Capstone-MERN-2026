@@ -8,11 +8,9 @@ const userSchema = mongoose.Schema ( {
   "emailId":{ type: String},
   "role":{ type: String},
   "linkedIn":{ type: String},
-  "createdDate":{ type: String},
-  "updatedDate":{ type: String},
   "refreshToken":{ type: String},
   "refreshTokenTime":{ type: String}
-})
+}, { timestamps: true })
 const User = mongoose.model('user', userSchema);
 
 export default User;

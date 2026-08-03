@@ -18,5 +18,5 @@ app.use("/api/user", userRoutes);
 //Server on PORT and DB connection
 app.listen(PORT, () => {
     console.log('onPORT: ', PORT);
-    //dbConn();
+    dbConn();
 })
