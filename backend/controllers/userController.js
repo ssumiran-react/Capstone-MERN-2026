@@ -21,3 +21,15 @@ export const createUser = async (req, res) => {  //console.log(req.body);
     res.status(400).json({ ErrorCrateUser: e.message })
   }
 }
+
+//get User Login
+export const getUserLogin = async (req, res) => {
+  //console.log(req.query);
+  try {
+    const user = await User.find({userName:req.query.userName, password:req.query.password});
+    res.status(200).json(user);
+  } catch(e) {
+    console.log(e);
+    res.status(400).json({ ErrorUserLogin: e.message })
+  }
+}
