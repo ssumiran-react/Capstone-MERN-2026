@@ -3,7 +3,7 @@ import User from "../models/user.js";
 //get All Users
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.find({});//.sort({ createdAt: -1 });
+    const users = await User.find({role:"Developer"});//.sort({ createdAt: -1 });
     res.status(200).json(users);
   } catch(e) {
     console.log(e);
@@ -11,7 +11,7 @@ export const getAllUsers = async (req, res) => {
   }
 }
 
-//create/post a User
+//create/post a Developer User
 export const createUser = async (req, res) => {  //console.log(req.body);
   try { 
     const user = await User.create(req.body);
