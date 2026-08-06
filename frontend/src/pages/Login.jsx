@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-export default function Login(props) {
+export default function Login({userLogin}) {
 
   const userNameRef = useRef();
   const passwordRef = useRef();
@@ -11,7 +11,7 @@ export default function Login(props) {
 
     try{
       //Pass login info to App
-      props.userLogin({
+      userLogin({
         userName:userNameRef.current.value,
         password:passwordRef.current.value
       });
