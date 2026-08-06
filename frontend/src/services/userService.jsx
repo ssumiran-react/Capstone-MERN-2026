@@ -13,3 +13,17 @@ export async function getLoginCredentialService(loginInfo) {
     console.log(e);
   }
 }
+
+export async function getAllUserDeveloper(loginInfo) {
+  try {  //console.log(BASE_URL, " getLoginCredentialService ");
+    //Get user Credential request
+    const response = await fetch(
+      `${BASE_URL}/api/user/`
+    );
+    const result = await response.json();
+    //console.log(result, " getLoginCredentialService ");
+    return result;
+  }catch (e) {
+    console.log(e);
+  }
+}
