@@ -6,21 +6,22 @@ import Home from './pages/Home';
 import { getLoginCredentialService } from './services/userService';
 
 function App() {
-  const [loggedUser, setLoggedUser] = useState([])
+  const [loggedUser, setLoggedUser] = useState([]);//{userName:"jaland", password:"ja1234", role:"Instructor"}])
   const navigate = useNavigate();
 
   //Function to get User Login Credential
   const getLoginCredential = async(userCredential) => {
-    
     try {
-      const userLogin = await getLoginCredentialService(userCredential);
+      const loginUser = await getLoginCredentialService(userCredential);
       //console.log(userLogin);
-      setLoggedUser(userLogin);
+      if(loginUser != null){
+        setLoggedUser(loginUser);
+      }
 
-      if (userLogin.length === 0){
-        navigate('/Login', { replace: true });
-      }else{        
+      if (loginUser.length === 1){
         navigate('/Home', { replace: true });
+      }else{        
+        navigate('/Login', { replace: true });
       }
     } catch(e) {
       console.error(e)
@@ -32,7 +33,7 @@ function App() {
       <Routes>
         <Route path="/Login" element={<Login userLogin={getLoginCredential}/>}/>
         <Route path="/Home" element={<Home loggedUser={loggedUser}/>}/>
-        <Route path="" element={<Login userLogin={getLoginCredential}/>}/>
+        <Route path="/" element={<Login userLogin={getLoginCredential}/>}/>
       </Routes>
     </>
 
