@@ -1,17 +1,22 @@
 import {useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
 import {UserContext} from "../context/UserContext.jsx";
+
 import Dashboard from "../components/Dashboard"
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import UserList from "../components/UserList"
-import { getAllUserDeveloper } from "../services/userService";
-import { useNavigate } from "react-router-dom";
+
+import { getAllUserDeveloper } from "../services/userService.jsx";
+import { getProjectByUserId } from "../services/ProjectService.jsx"
 
 export default function Home({loggedUser}){  
   //console.log ("getUserDev: ",loggedUser);
-  const [userData, setUserData] = useState([]);
   const navigate = useNavigate();
+  const [userData, setUserData] = useState([]);
+  const [projectData, setProjectData] = useState([]);
   
+  //Get a Single Developer User or All Developer Users
   async function getUserDev(){ 
     try { 
       let users;
@@ -22,7 +27,7 @@ export default function Home({loggedUser}){
       }else if(loggedUser[0].role.toLowerCase() == "instructor"){  
         users = await getAllUserDeveloper();
       }else{  
-        users = loggedUser;
+        users = loggedUser; 
       }
 
       setUserData(users);
@@ -32,17 +37,36 @@ export default function Home({loggedUser}){
     }
   };
 
+  //Get Projects By each User
+  const projectByUser = async (uId)=>{ //console.log (uId,"projectByUser");
+    try { 
+      //get All Project related to single User
+      const id = JSON.stringify(uId).replace(/"/g, '');
+      const projData = await getProjectByUserId(id);
+      
+      setProjectData(projData);
+      console.log (projData,"Home getProjectByUser:",projectData);
+    }catch(e) {
+      console.error(e)
+    }
+  };
+
   useEffect(() => {
-    getUserDev();
-  }, []);
+    try {
+      getUserDev();
+    } catch (error) {
+      console.error("Error Home useEffect(): ", error);
+    }
+  }, [projectData]);
+  
 
 
   return(
     <div> 
       <Header />
       <UserContext.Provider value={{userData, setUserData}}>
-      <UserList />
-      {/* <Dashboard />     */}
+        <UserList projectByUser={projectByUser} />
+        {/* <Dashboard />     */}
       </UserContext.Provider>
       <Footer />
     </div>
