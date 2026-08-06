@@ -8,7 +8,7 @@ router
   .post(createUserProject)
 
 router
-  .route("/:userId")
+  .route("/user")
   .get(getProjectByUser)
 
 export default router    
