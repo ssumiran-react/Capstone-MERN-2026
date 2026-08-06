@@ -2,8 +2,8 @@ import Project from "../models/project.js";
 
 //get All Projects releated to each User
 export const getProjectByUser = async (req, res) => {
-  try {
-    const projects = await Project.find({"userId":"6a70deab5ca0543bf30aac65"});//.sort({ createdAt: -1 });
+  try {  console.log(req.params);
+    const projects = await Project.find({userId : req.params.userId});//.sort({ createdAt: -1 });
     res.status(200).json(projects);
   } catch(e) {
     console.log(e);

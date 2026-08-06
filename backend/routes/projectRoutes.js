@@ -5,7 +5,10 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(getProjectByUser)
   .post(createUserProject)
+
+router
+  .route("/:userId")
+  .get(getProjectByUser)
 
 export default router    

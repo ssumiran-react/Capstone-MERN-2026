@@ -1,7 +1,7 @@
 import User from "../models/user.js";
 
-//get All Users
-export const getAllUsers = async (req, res) => {
+//get All Developer Users
+export const getAllUserDev = async (req, res) => {
   try {
     const users = await User.find({role:"Developer"});//.sort({ createdAt: -1 });
     res.status(200).json(users);
