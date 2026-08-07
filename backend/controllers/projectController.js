@@ -27,7 +27,7 @@ export const createUserProject = async (req, res) => {  //console.log ("createUs
 //Pup update Project for User
 export const updatUserProject = async (req, res) => { //console.log ("updatUserProject: ",req.body);
     try {
-      const project = await Project.findByIdAndUpdate(req.params.id, req.body);
+      const project = await Project.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
       res.status(200).json(project);
     } catch(e) {
       console.log(e);
