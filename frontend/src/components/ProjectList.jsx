@@ -1,14 +1,15 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { ProjectContext } from "../context/ProjectContext";
-import { createProjectForUser, deleteProjectId } from "../services/ProjectService";
+import { createProjectForUser, deleteProjectId, updateProjectForUser } from "../services/ProjectService";
 
 
 export default function ProjectList({projectByUser}) {  //console.log("ProjectList")
   const {projectData, setProjectData}= useContext(ProjectContext); 
-  const {projDetail, setProjDetail}= useState(); 
+  const [projDetail, setProjDetail]= useState(); 
 
   const userIdRef = useRef();
   const userNameRef = useRef();
+  const projIdRef = useRef();
   const projNameRef = useRef();
   const projectDescRef = useRef();
   const gitHubRef = useRef();
@@ -23,7 +24,6 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
 
   //Adding New Project for specific User.
   async function addNewProject(){
-    const today = new Date();
     await createProjectForUser(
       {
         userId : userIdRef.current.value,
@@ -39,13 +39,14 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
           {
             status : "Initial",
             reason : reasonRef.current.value,
-            createAt : today
+            createdAt : new Date()
           }
         ]
       }
     );
     await projectByUser(userIdRef.current.value);
     await clearFieldClick();
+    
 
   //  
   // "projectName":"Cybor App",
@@ -64,43 +65,82 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
   // }]
   }
 
-  function onEditClick(p){
+  //Update specific Project progress history
+  async function updateProjClick(){  console.log("updateProjClick: ");
+    
+    await updateProjectForUser(
+      {
+        userId : userIdRef.current.value,
+        userName : userNameRef.current.value,
+        _id : projIdRef.current.value,
+        projectName : projNameRef.current.value,
+        projectDesc : projectDescRef.current.value,
+        gitHub : gitHubRef.current.value,
+        url : urlRef.current.value,
+        startAt : startAtRef.current.value,
+        endAt : endAtRef.current.value,
+        isActive :"Y",
+        $push:
+          {details : [
+            {
+              status : statusRef.current.value,
+              reason : reasonRef.current.value,
+              createdAt : new Date()
+            }
+
+          ]
+          }
+      }
+    );
+    await projectByUser(userIdRef.current.value);
+    await clearStatusReason();
+  }
+
+  function editClick(p){
+    clearFieldClick();
     userIdRef.current.value = p.userId;
     userNameRef.current.value = p.userName;
+    projIdRef.current.value = p._id;
     projNameRef.current.value = p.projectName;
     projectDescRef.current.value = p.projectDesc;
     gitHubRef.current.value = p.gitHub;
     urlRef.current.value = p.url;
     startAtRef.current.value = p.startAt;
     endAtRef.current.value = p.endAt;
-    console.log("edit: ",p.details)
-    //setProjDetail(p.details);
+    setProjDetail(p.details);
   }
 
-  function onDeleteProjectClick(id, userId){
+  function deleteProjectClick(id, userId){
     console.log(new Date(),"onDeleteProjectClick: ", id);
     deleteProjectId(id);
     projectByUser(userId);
   }
 
+  //Reset the Form fields and clear Project Details
   function clearFieldClick(){
     userIdRef.current.value = "";
     userNameRef.current.value = "";
+    projIdRef.current.value = "";
     projNameRef.current.value = "";
     projectDescRef.current.value = "";
     gitHubRef.current.value = "";
     urlRef.current.value = "";
     startAtRef.current.value = "";
     endAtRef.current.value = "";
+    clearStatusReason();
+    setProjDetail([]);
+  }
+
+  function clearStatusReason(){
     statusRef.current.value = "";
     reasonRef.current.value = "";
   }
 
   useEffect(() => {
-    
+    clearFieldClick();
   }, [projectData]);
   
-  console.log("ProjectList: ", projectData);
+  //console.log("ProjectList: ", projectData);
   return (
     <div className="container-fluid" >
       <div className="row g-4">
@@ -132,11 +172,11 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
                         <td>{p.endAt}</td>
                         
                         <td><span className="badge bg-success">{
-                          p.details.length != 0 && p.details[p.details.length-1].status}</span>
+                          p.details.length != 0 && p.details[p.details.length -1].status}</span>
                         </td>
                         <td>
-                          <button className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={()=> onEditClick(p)}>Edit</button>
-                          <button className="btn btn-sm btn-outline-danger py-0 px-1" onClick={()=> onDeleteProjectClick(p._id, p.userId)}>Delete</button>
+                          <button className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={()=> editClick(p)}>Edit</button>
+                          <button className="btn btn-sm btn-outline-danger py-0 px-1" onClick={()=> deleteProjectClick(p._id, p.userId)}>Delete</button>
                         </td>
                       </tr> 
                     )}
@@ -151,7 +191,7 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
           <div className="card shadow-sm h-100">
             
             <div className="card-header bg-white d-flex justify-content-between align-items-center py-3"> 
-              <h5 className="mb-0">Project Details</h5>
+              <h4 className="mb-0">Project Information</h4>
               <button className="btn btn-sm btn-primary" onClick={addNewProject}>New Project</button>
             </div>
             <div className="card-body">
@@ -163,6 +203,10 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
                 <div className="mb-3">
                   <label className="form-label">Login User name: </label>
                   <input type="text" className="" placeholder="Enter User login name" ref={userNameRef}/> 
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Project Id: </label>
+                  <input type="text" className="" placeholder="Enter project name" ref={projIdRef}/> 
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Project Name: </label>
@@ -199,9 +243,12 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
 
                 <div className="d-flex justify-content-end gap-2">
                   <button type="button" className="btn btn-secondary" onClick={clearFieldClick}>Clear</button>
-                  <button type="submit" className="btn btn-success">Update</button>
+                  <button type="button" className="btn btn-success" onClick={updateProjClick}>Update</button>
                 </div>
                 <div>
+                  <div>
+                    <h4>Project History Details</h4>
+                  </div>
                   <table className="table table-hover align-middle mb-0">
                   <thead className="table-light">
                     <tr>
@@ -212,14 +259,14 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
                     </tr>
                   </thead>
                   <tbody>
-                    {projDetail && projDetail.map( d => 
-                      
-                      
+                    {projDetail && [...projDetail]
+                      .sort((a,b)=>a.createdAt > b.createdAt ? -1 : 1)
+                      .map( d => 
                       <tr key={d._id}>
                         <td hidden={true} >{d._id}</td>
                         <td>{d.status}</td>      
                         <td>{d.reason}</td>
-                        <td>{d.createAt}</td>
+                        <td>{d.createdAt}</td>
                         
                       </tr> 
                       
