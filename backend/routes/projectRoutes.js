@@ -1,5 +1,6 @@
 import express from 'express';
-import { getProjectByUser, createUserProject, deleteUserProject } from '../controllers/projectController.js';
+import { getProjectByUser, createUserProject, 
+  updatUserProject, deleteUserProject } from '../controllers/projectController.js';
 
 const router = express.Router();
 
@@ -12,6 +13,11 @@ router
   .get(getProjectByUser)
 
 router
+  .route("/user/:id")
+  .put(updatUserProject)  
+
+router
   .route("/delete/:id")
-  .get(deleteUserProject)
-export default router    
+  .delete(deleteUserProject)
+
+  export default router    
