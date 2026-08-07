@@ -23,3 +23,14 @@ export const createUserProject = async (req, res) => {  //console.log(req.body);
     res.status(400).json({ ErrorCrateUserProject: e.message })
   }
 }
+
+//create/post a Project for User
+export const deleteUserProject = async (req, res) => {  //console.log(req.params.id);
+  try { 
+    const project = await Project.findByIdAndDelete(req.params.id);
+    res.status(200).json(project);
+  }catch(e) {
+    console.log(e);
+    res.status(400).json({ ErrorDeleteUserProject: e.message })
+  }
+}
