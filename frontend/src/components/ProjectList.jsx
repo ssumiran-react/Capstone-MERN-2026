@@ -45,6 +45,7 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
       }
     );
     await projectByUser(userIdRef.current.value);
+    await clearFieldClick();
 
   //  
   // "projectName":"Cybor App",
@@ -80,6 +81,19 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
     console.log(new Date(),"onDeleteProjectClick: ", id);
     deleteProjectId(id);
     projectByUser(userId);
+  }
+
+  function clearFieldClick(){
+    userIdRef.current.value = "";
+    userNameRef.current.value = "";
+    projNameRef.current.value = "";
+    projectDescRef.current.value = "";
+    gitHubRef.current.value = "";
+    urlRef.current.value = "";
+    startAtRef.current.value = "";
+    endAtRef.current.value = "";
+    statusRef.current.value = "";
+    reasonRef.current.value = "";
   }
 
   useEffect(() => {
@@ -184,7 +198,7 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
                 </div>
 
                 <div className="d-flex justify-content-end gap-2">
-                  <button type="button" className="btn btn-secondary">Clear</button>
+                  <button type="button" className="btn btn-secondary" onClick={clearFieldClick}>Clear</button>
                   <button type="submit" className="btn btn-success">Update</button>
                 </div>
                 <div>
