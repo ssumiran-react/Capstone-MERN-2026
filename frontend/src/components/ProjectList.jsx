@@ -24,12 +24,12 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
   //Adding New Project for specific User.
   async function addNewProject(){
     const today = new Date();
-    createProjectForUser(
+    await createProjectForUser(
       {
         userId : userIdRef.current.value,
         userName : userNameRef.current.value,
         projectName : projNameRef.current.value,
-        projectDes : projectDescRef.current.value,
+        projectDesc : projectDescRef.current.value,
         gitHub : gitHubRef.current.value,
         url : urlRef.current.value,
         startAt : startAtRef.current.value,
@@ -44,7 +44,7 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
         ]
       }
     );
-    
+    await projectByUser(userIdRef.current.value);
 
   //  
   // "projectName":"Cybor App",
@@ -67,7 +67,7 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
     userIdRef.current.value = p.userId;
     userNameRef.current.value = p.userName;
     projNameRef.current.value = p.projectName;
-    projectDescRef.current.value = p.projectDes;
+    projectDescRef.current.value = p.projectDesc;
     gitHubRef.current.value = p.gitHub;
     urlRef.current.value = p.url;
     startAtRef.current.value = p.startAt;

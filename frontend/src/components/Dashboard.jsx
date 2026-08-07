@@ -4,7 +4,7 @@ import { ProjectContext } from "../context/ProjectContext";
 import ProjectList from "./ProjectList";
 
 
-export default function Dashboard(){
+export default function Dashboard({projectByUser}){
   const {projectData, setProjectData}= useContext(ProjectContext); 
   
   console.log("Dashboard: ", projectData);
@@ -14,7 +14,7 @@ export default function Dashboard(){
       <div className="text-center bg-color-blue">
         <label>Project Dashboard</label>
       </div>  
-      <ProjectList />
+      <ProjectList projectByUser={projectByUser} />
     </>
   )
 }
