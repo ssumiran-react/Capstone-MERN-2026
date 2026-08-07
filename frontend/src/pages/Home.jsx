@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import {UserContext} from "../context/UserContext.jsx";
+import {ProjectContext} from "../context/ProjectContext.jsx";
 
 import Dashboard from "../components/Dashboard"
 import Header from "../components/Header"
@@ -45,7 +46,7 @@ export default function Home({loggedUser}){
       const projData = await getProjectByUserId(id);
       
       setProjectData(projData);
-      console.log (projData,"Home getProjectByUser:",projectData);
+      //console.log (projData,"Home getProjectByUser:",projectData);
     }catch(e) {
       console.error(e)
     }
@@ -57,7 +58,7 @@ export default function Home({loggedUser}){
     } catch (error) {
       console.error("Error Home useEffect(): ", error);
     }
-  }, [projectData]);
+  }, []);
   
 
 
@@ -66,7 +67,11 @@ export default function Home({loggedUser}){
       <Header />
       <UserContext.Provider value={{userData, setUserData}}>
         <UserList projectByUser={projectByUser} />
-        {/* <Dashboard />     */}
+        
+        <ProjectContext.Provider value={{projectData, setProjectData}}>
+          <Dashboard />
+        </ProjectContext.Provider>    
+
       </UserContext.Provider>
       <Footer />
     </div>
