@@ -69,7 +69,7 @@ export default function Home({loggedUser}){
         <UserList projectByUser={projectByUser} />
         
         <ProjectContext.Provider value={{projectData, setProjectData}}>
-          <Dashboard />
+          <Dashboard projectByUser={projectByUser} />
         </ProjectContext.Provider>    
 
       </UserContext.Provider>
