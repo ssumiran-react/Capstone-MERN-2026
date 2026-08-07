@@ -39,7 +39,7 @@ export async function createProjectForUser(newProj) {
 //Update put a Project for specific user 
 export async function updateProjectForUser(putProj) {
   try {  
-    console.log("updateProjectForUser: ",putProj);
+    //console.log("updateProjectForUser: ",putProj);
     const response = await fetch(
       `${BASE_URL}/api/project/user/${putProj._id}`, {
         method: 'PUT',

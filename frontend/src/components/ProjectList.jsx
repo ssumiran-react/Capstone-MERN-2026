@@ -66,9 +66,13 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
   }
 
   //Update specific Project progress history
-  async function updateProjClick(){  //console.log("updateProjClick: ");
-    
-    await updateProjectForUser(
+  async function updateProjClick(){  
+    const newDetail = {
+              status : statusRef.current.value,
+              reason : reasonRef.current.value,
+              createdAt : new Date()
+            }
+    const updateProj = await updateProjectForUser(
       {
         userId : userIdRef.current.value,
         userName : userNameRef.current.value,
@@ -81,18 +85,16 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
         endAt : endAtRef.current.value,
         isActive :"Y",
         $push:
-          {details : [
-            {
-              status : statusRef.current.value,
-              reason : reasonRef.current.value,
-              createdAt : new Date()
-            }
-
-          ]
+          {
+            details : [ newDetail ]
           }
       }
     );
+    //console.log("updateProjClick: ", updateProj);
     await projectByUser(userIdRef.current.value);
+
+    //await editClick(updateProj);
+    await setProjDetail(prevProjDetail => [...prevProjDetail, updateProj.details.at(-1)]);
     await clearStatusReason();
   }
 
@@ -137,7 +139,7 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
   }
 
   useEffect(() => {
-    clearFieldClick();
+    //clearFieldClick();
   }, [projectData]);
   
   //console.log("ProjectList: ", projectData);
@@ -204,7 +206,7 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
                   <label className="form-label">Login User name: </label>
                   <input type="text" className="" placeholder="Enter User login name" ref={userNameRef}/> 
                 </div>
-                <div className="mb-3">
+                <div className="mb-3" hidden={true}>
                   <label className="form-label">Project Id: </label>
                   <input type="text" className="" placeholder="Enter project name" ref={projIdRef}/> 
                 </div>
