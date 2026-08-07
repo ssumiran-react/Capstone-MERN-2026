@@ -6,7 +6,18 @@ import Home from './pages/Home';
 import { getLoginCredentialService } from './services/userService';
 
 function App() {
-  const [loggedUser, setLoggedUser] = useState([]);//{userName:"jaland", password:"ja1234", role:"Instructor"}])
+  const [loggedUser, setLoggedUser] = useState([
+//     {
+// "userName":"jaland",
+//   "firstName":"Ja",
+//   "lastName":"Land",
+//   "password":"ja1234",
+//   "emailId":"tester11t@abc.com",
+//   "role":"Instructor",
+//   "linkedIn":"https://linkedin/tester11",
+//   "refreshToken":"1erw34d3",
+//     }
+  ]);
   const navigate = useNavigate();
 
   //Function to get User Login Credential
@@ -18,7 +29,7 @@ function App() {
         setLoggedUser(loginUser);
       }
 
-      if (loginUser.length === 1){
+      if (loginUser){
         navigate('/Home', { replace: true });
       }else{        
         navigate('/Login', { replace: true });
