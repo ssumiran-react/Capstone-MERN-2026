@@ -23,7 +23,7 @@ export const createUserProject = async (req, res) => {  //console.log(req.body);
     res.status(400).json({ ErrorCrateUserProject: e.message })
   }
 }
-// PUT /api/todos/:id
+//Pup update Project for User
 export const updatUserProject = async (req, res) => {
     try {
         const Project = await Project.findByIdAndUpdate(req.params.id, req.body);
