@@ -14,12 +14,35 @@ export async function getProjectByUserId(userId) {
   }
 }
 
+//Create a Project for specific user 
+export async function createProjectForUser(newProj) {
+  try {  
+    //console.log("createProjectForUser: ",newProj);
+    const response = await fetch(
+      `${BASE_URL}/api/project/`, {
+        method: 'POST',
+        body: JSON.stringify(newProj),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    const result = await response.json();
+    //console.log(result, " createProjectForUser ");
+    return result;
+  }catch (e) {
+    console.log(e);
+  }
+}
+
 //Delete Projects per user
 export async function deleteProjectId(pid) {
   try {  
     //Get Projects per user
     const response = await fetch(
-      `${BASE_URL}/api/project/delete/${pid}`
+      `${BASE_URL}/api/project/delete/${pid}`, 
+      { method: 'DELETE'}
     );
     const result = await response.json();
     //console.log(result, " getProjectById ");

@@ -1,27 +1,71 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ProjectContext } from "../context/ProjectContext";
+import { createProjectForUser, deleteProjectId } from "../services/ProjectService";
 
 
-export default function ProjectList() {  //console.log("ProjectList")
+export default function ProjectList({projectByUser}) {  //console.log("ProjectList")
   const {projectData, setProjectData}= useContext(ProjectContext); 
   const {projDetail, setProjDetail}= useState(); 
 
+  const userIdRef = useRef();
+  const userNameRef = useRef();
   const projNameRef = useRef();
   const projectDescRef = useRef();
   const gitHubRef = useRef();
   const urlRef = useRef();
   const startAtRef = useRef();
   const endAtRef = useRef();
-  const userIdRef = useRef();
-  const userNameRef = useRef();
   const isActiveRef = useRef();
   const detailsRef = useRef([]);
 
   const statusRef = useRef();
   const reasonRef = useRef();
 
+  //Adding New Project for specific User.
+  async function addNewProject(){
+    const today = new Date();
+    createProjectForUser(
+      {
+        userId : userIdRef.current.value,
+        userName : userNameRef.current.value,
+        projectName : projNameRef.current.value,
+        projectDes : projectDescRef.current.value,
+        gitHub : gitHubRef.current.value,
+        url : urlRef.current.value,
+        startAt : startAtRef.current.value,
+        endAt : endAtRef.current.value,
+        isActive :"Y",
+        details : [
+          {
+            status : "Initial",
+            reason : reasonRef.current.value,
+            createAt : today
+          }
+        ]
+      }
+    );
+    
+
+  //  
+  // "projectName":"Cybor App",
+  // "projectDesc":"Cybor App validates app id.",
+  // "gitHub":"",
+  // "url":"",
+  // "startAt":"2026-08-03T18:32:11.087Z",
+  // "endAt":"2026-08-07T18:32:11.087Z",
+  // "userId":"6a70deab5ca0543bf30aac65",
+  // "userName":"test2",
+  // "isActive":"Y",
+  // "details":[{
+  //   "status":"Initial",
+  //   "reason":"New project.",
+  //   "createdAt":"2026-08-03T17:02:11.087Z"
+  // }]
+  }
 
   function onEditClick(p){
+    userIdRef.current.value = p.userId;
+    userNameRef.current.value = p.userName;
     projNameRef.current.value = p.projectName;
     projectDescRef.current.value = p.projectDes;
     gitHubRef.current.value = p.gitHub;
@@ -32,10 +76,15 @@ export default function ProjectList() {  //console.log("ProjectList")
     //setProjDetail(p.details);
   }
 
-  function onDeleteProjectClick(id){
-
+  function onDeleteProjectClick(id, userId){
+    console.log(new Date(),"onDeleteProjectClick: ", id);
+    deleteProjectId(id);
+    projectByUser(userId);
   }
 
+  useEffect(() => {
+    
+  }, [projectData]);
   
   console.log("ProjectList: ", projectData);
   return (
@@ -68,10 +117,12 @@ export default function ProjectList() {  //console.log("ProjectList")
                         <td>{p.startAt}</td>
                         <td>{p.endAt}</td>
                         
-                        <td><span className="badge bg-success">{p.details[p.details.length-1].status}</span></td>
+                        <td><span className="badge bg-success">{
+                          p.details.length != 0 && p.details[p.details.length-1].status}</span>
+                        </td>
                         <td>
                           <button className="btn btn-sm btn-outline-secondary py-0 px-1" onClick={()=> onEditClick(p)}>Edit</button>
-                          <button className="btn btn-sm btn-outline-danger py-0 px-1" onClick={()=> onDeleteProjectClick(p._id)}>Delete</button>
+                          <button className="btn btn-sm btn-outline-danger py-0 px-1" onClick={()=> onDeleteProjectClick(p._id, p.userId)}>Delete</button>
                         </td>
                       </tr> 
                     )}
@@ -87,10 +138,18 @@ export default function ProjectList() {  //console.log("ProjectList")
             
             <div className="card-header bg-white d-flex justify-content-between align-items-center py-3"> 
               <h5 className="mb-0">Project Details</h5>
-              <button className="btn btn-sm btn-primary">New Project</button>
+              <button className="btn btn-sm btn-primary" onClick={addNewProject}>New Project</button>
             </div>
             <div className="card-body">
               <form>
+                <div className="mb-3">
+                  <label className="form-label">User Id: </label>
+                  <input type="text" className="" placeholder="Enter project name" ref={userIdRef} required/> 
+                </div>
+                <div className="mb-3">
+                  <label className="form-label">Login User name: </label>
+                  <input type="text" className="" placeholder="Enter User login name" ref={userNameRef}/> 
+                </div>
                 <div className="mb-3">
                   <label className="form-label">Project Name: </label>
                   <input type="text" className="" placeholder="Enter project name" ref={projNameRef}/> 
@@ -109,7 +168,7 @@ export default function ProjectList() {  //console.log("ProjectList")
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Start Date: </label>
-                  <input type="text" className="" placeholder="Start project date" ref={startAtRef} readOnly/> 
+                  <input type="text" className="" placeholder="Start project date" ref={startAtRef} /> 
                 </div>
                 <div className="mb-3">
                   <label className="form-label">End Date: </label>
