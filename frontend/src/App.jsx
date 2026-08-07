@@ -7,16 +7,16 @@ import { getLoginCredentialService } from './services/userService';
 
 function App() {
   const [loggedUser, setLoggedUser] = useState([
-//     {
-// "userName":"jaland",
-//   "firstName":"Ja",
-//   "lastName":"Land",
-//   "password":"ja1234",
-//   "emailId":"tester11t@abc.com",
-//   "role":"Instructor",
-//   "linkedIn":"https://linkedin/tester11",
-//   "refreshToken":"1erw34d3",
-//     }
+    // {
+    //   "userName":"jaland",
+    //   "firstName":"Ja",
+    //   "lastName":"Land",
+    //   "password":"ja1234",
+    //   "emailId":"tester11t@abc.com",
+    //   "role":"Instructor",
+    //   "linkedIn":"https://linkedin/tester11",
+    //   "refreshToken":"1erw34d3",
+    // }
   ]);
   const navigate = useNavigate();
 
@@ -47,8 +47,6 @@ function App() {
         <Route path="/" element={<Login userLogin={getLoginCredential}/>}/>
       </Routes>
     </>
-
-    
   )
 }
 

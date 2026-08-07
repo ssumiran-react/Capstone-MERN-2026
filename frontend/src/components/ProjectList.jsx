@@ -66,7 +66,7 @@ export default function ProjectList({projectByUser}) {  //console.log("ProjectLi
   }
 
   //Update specific Project progress history
-  async function updateProjClick(){  console.log("updateProjClick: ");
+  async function updateProjClick(){  //console.log("updateProjClick: ");
     
     await updateProjectForUser(
       {

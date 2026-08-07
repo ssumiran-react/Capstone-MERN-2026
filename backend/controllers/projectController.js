@@ -14,7 +14,7 @@ export const getProjectByUser = async (req, res) => {
 }
 
 //create/post a Project for User
-export const createUserProject = async (req, res) => {  //console.log(req.body);
+export const createUserProject = async (req, res) => {  //console.log ("createUserProject",req.body);
   try { 
     const project = await Project.create(req.body);
     res.status(200).json(project);
@@ -23,14 +23,15 @@ export const createUserProject = async (req, res) => {  //console.log(req.body);
     res.status(400).json({ ErrorCrateUserProject: e.message })
   }
 }
+
 //Pup update Project for User
-export const updatUserProject = async (req, res) => {
+export const updatUserProject = async (req, res) => { //console.log ("updatUserProject: ",req.body);
     try {
-        const Project = await Project.findByIdAndUpdate(req.params.id, req.body);
-        res.status(200).json(Project);
+      const project = await Project.findByIdAndUpdate(req.params.id, req.body);
+      res.status(200).json(project);
     } catch(e) {
-        console.log(e);
-        res.status(400).json({ ErrorUpdateUserProject: e.message })
+      console.log(e);
+      res.status(400).json({ ErrorUpdateUserProject: e.message })
     }
 }
 
