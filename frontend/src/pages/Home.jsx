@@ -28,7 +28,8 @@ export default function Home({loggedUser}){
       }else if(loggedUser[0].role.toLowerCase() == "instructor"){  
         users = await getAllUserDeveloper();
       }else{  
-        users = loggedUser; 
+        users = loggedUser;  //console.log("users._id: ",users);
+        projectByUser(users[0]._id);
       }
 
       setUserData(users);
